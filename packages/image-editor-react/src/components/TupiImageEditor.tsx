@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TupiImageEditor as CoreEditor } from "@tupi/image-editor";
+import { EditorControls } from "./EditorControls";
 
 export interface TupiImageEditorProps {
     src: string;
@@ -15,21 +16,20 @@ export const TupiImageEditor: React.FC<TupiImageEditorProps> = ({
     onReady,
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const editorRef = useRef<CoreEditor | null>(null);
+    const [editor, setEditor] = useState<CoreEditor | null>(null);
 
     useEffect(() => {
         if (!canvasRef.current) {
             return;
         }
 
-        editorRef.current = new CoreEditor(canvasRef.current);
+        const editorInstance = new CoreEditor(canvasRef.current);
+        setEditor(editorInstance);
 
         const loadImage = async () => {
             try {
-                await editorRef.current?.loadImage(src);
-                if (editorRef.current) {
-                    onReady?.(editorRef.current);
-                }
+                await editorInstance.loadImage(src);
+                onReady?.(editorInstance);
             } catch (error) {
                 console.error("Failed to load image:", error);
             }
@@ -38,9 +38,14 @@ export const TupiImageEditor: React.FC<TupiImageEditorProps> = ({
         loadImage();
 
         return () => {
-            editorRef.current = null;
+            setEditor(null);
         };
-    }, [src]);
+    }, [src, onReady]);
 
-    return <canvas ref={canvasRef} width={width} height={height}></canvas>;
+    return (
+        <>
+            {editor && <EditorControls editor={editor} />}
+            <canvas ref={canvasRef} width={width} height={height}></canvas>
+        </>
+    );
 };

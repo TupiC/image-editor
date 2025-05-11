@@ -17,6 +17,8 @@ export class TupiImageEditor {
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
     private commandInvoker: CommandInvoker;
+    private image: HTMLImageElement | null = null;
+
     imageState: {
         flip: { horizontal: boolean; vertical: boolean };
         rotation: number;
@@ -75,13 +77,47 @@ export class TupiImageEditor {
     loadImage(src: string): Promise<void> {
         return new Promise((resolve, reject) => {
             const img = new Image();
+            img.crossOrigin = "Anonymous";
             img.onload = () => {
-                this.ctx.drawImage(img, 0, 0);
+                this.image = img;
+                this.resetImageState();
+                this.fitImageToCanvas();
+                this.redraw();
                 resolve();
             };
-            img.onerror = reject;
+            img.onerror = (e) => {
+                console.error("Image load error:", e);
+                reject(new Error("Failed to load image"));
+            };
             img.src = src;
         });
+    }
+
+    private fitImageToCanvas() {
+        if (!this.image) return;
+
+        const imageAspect = this.image.width / this.image.height;
+        const canvasAspect = this.canvas.width / this.canvas.height;
+
+        let renderWidth, renderHeight;
+
+        if (imageAspect > canvasAspect) {
+            renderWidth = this.canvas.width;
+            renderHeight = this.canvas.width / imageAspect;
+        } else {
+            renderHeight = this.canvas.height;
+            renderWidth = this.canvas.height * imageAspect;
+        }
+
+        this.canvas.width = renderWidth;
+        this.canvas.height = renderHeight;
+
+        this.imageState.crop = {
+            x: 0,
+            y: 0,
+            width: this.image.width,
+            height: this.image.height,
+        };
     }
 
     flip(horizontal: boolean, vertical: boolean) {
@@ -120,30 +156,62 @@ export class TupiImageEditor {
     }
 
     private redraw() {
-        // Clear and redraw canvas with current transformations
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        if (!this.image) {
+            return;
+        }
 
-        // Apply transformations based on imageState
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         this.ctx.save();
 
-        // Apply flip
-        if (this.imageState.flip.horizontal || this.imageState.flip.vertical) {
-            this.ctx.scale(
-                this.imageState.flip.horizontal ? -1 : 1,
-                this.imageState.flip.vertical ? -1 : 1
-            );
-        }
-
-        // Apply rotation
         if (this.imageState.rotation !== 0) {
+            this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
             this.ctx.rotate((this.imageState.rotation * Math.PI) / 180);
+            this.ctx.translate(-this.canvas.width / 2, -this.canvas.height / 2);
         }
 
-        // Apply crop
-        // Note: You'll need to implement the actual drawing logic for crop
-        // This is just a placeholder
-        // this.ctx.drawImage(/* cropped image */); //TODO
+        let scaleX = this.imageState.flip.horizontal ? -1 : 1;
+        let scaleY = this.imageState.flip.vertical ? -1 : 1;
+        this.ctx.scale(scaleX, scaleY);
+
+        let x = this.imageState.flip.horizontal ? -this.canvas.width : 0;
+        let y = this.imageState.flip.vertical ? -this.canvas.height : 0;
+
+        const {
+            x: cropX,
+            y: cropY,
+            width: cropWidth,
+            height: cropHeight,
+        } = this.imageState.crop;
+
+        this.ctx.drawImage(
+            this.image,
+            cropX,
+            cropY,
+            cropWidth,
+            cropHeight,
+            x,
+            y,
+            this.canvas.width,
+            this.canvas.height
+        );
 
         this.ctx.restore();
+    }
+
+    private resetImageState() {
+        if (!this.image) {
+            return;
+        }
+
+        this.imageState = {
+            flip: { horizontal: false, vertical: false },
+            rotation: 0,
+            crop: {
+                x: 0,
+                y: 0,
+                width: this.image.width,
+                height: this.image.height,
+            },
+        };
     }
 }
