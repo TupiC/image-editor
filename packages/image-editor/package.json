@@ -1,11 +1,24 @@
 {
-  "name": "image-editor",
+  "name": "@tupi/image-editor",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc -b",
+    "watch": "tsc -b --watch",
+    "lint": "eslint ."
   },
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {  
+      "import": "./dist/index.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": ["dist"],
   "keywords": [],
   "author": "",
   "license": "ISC",

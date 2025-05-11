@@ -4,8 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "pnpm -r run build",
+    "build:core": "pnpm --filter image-editor build",
+    "build:sample": "pnpm --filter sample build",
+    "watch:core": "pnpm --filter image-editor watch",
+    "dev": "pnpm --filter sample dev"
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "keywords": [],
   "author": "",
   "license": "ISC",
