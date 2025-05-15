@@ -22,11 +22,13 @@
   "packageManager": "pnpm@10.6.2",
   "peerDependencies": {
     "@tupi/image-editor": "workspace:*",
+    "@tupi/design-system": "workspace:*",
     "react": "^19.1.0",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
     "@types/react": "^19.1.2",
-    "@types/react-dom": "^19.1.2"
+    "@types/react-dom": "^19.1.2",
+    "@tupi/design-system": "workspace:*"
   }
 }

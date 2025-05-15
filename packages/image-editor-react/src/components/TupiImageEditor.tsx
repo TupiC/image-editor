@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { TupiImageEditor as CoreEditor } from "@tupi/image-editor";
 import { EditorControls } from "./EditorControls";
+import "@tupi/design-system/dist";
 
 export interface TupiImageEditorProps {
     src: string;
@@ -45,6 +46,7 @@ export const TupiImageEditor: React.FC<TupiImageEditorProps> = ({
     return (
         <>
             {editor && <EditorControls editor={editor} />}
+            <my-element></my-element>
             <canvas ref={canvasRef} width={width} height={height}></canvas>
         </>
     );
