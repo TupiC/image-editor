@@ -8,7 +8,8 @@
     "build:core": "pnpm --filter image-editor build",
     "build:sample": "pnpm --filter sample build",
     "watch:core": "pnpm --filter image-editor watch",
-    "dev": "pnpm --filter sample dev"
+    "dev": "pnpm --filter sample dev",
+    "dev:storybook": "pnpm --filter design-system storybook"
   },
   "workspaces": [
     "packages/*"

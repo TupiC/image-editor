@@ -3,17 +3,28 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
+  "main": "dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./src/index.ts",
+      "require": "./src/index.ts"
+    },
+    "./dist": {
+      "import": "./dist/index.js",
+      "require": "./dist/index.js"
+    }
+  },
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vite",
+    "watch": "vite build --watch", 
     "build": "tsc && vite build",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "dependencies": {
-    "lit": "^3.3.0"
-  },
   "devDependencies": {
+    "lit": "^3.3.0",
     "@storybook/addon-essentials": "^8.6.12",
     "@storybook/blocks": "^8.6.12",
     "@storybook/builder-vite": "^8.6.12",
