@@ -9,6 +9,10 @@ importers:
   .: {}
 
   packages/design-system:
+    dependencies:
+      '@tupi/image-editor':
+        specifier: workspace:*
+        version: link:../image-editor
     devDependencies:
       '@storybook/addon-essentials':
         specifier: ^8.6.12

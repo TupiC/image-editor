@@ -97,15 +97,15 @@ export class TupiImageEditor {
         });
     }
 
-    private fitImageToCanvas() {
-        if (!this.image) return;
-        this.imageState.crop = {
-            x: 0,
-            y: 0,
-            width: this.image.width,
-            height: this.image.height,
-        };
-        this.renderer.render(this.image, this.imageState);
+    saveImage(type?: string): string {
+        const dataUrl = this.renderer.toDataURL(type);
+        const link = document.createElement("a");
+        link.href = dataUrl;
+        link.download = "image.png";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        return dataUrl;
     }
 
     flip(horizontal: boolean, vertical: boolean) {
@@ -175,6 +175,17 @@ export class TupiImageEditor {
 
     private redraw() {
         if (!this.image) return;
+        this.renderer.render(this.image, this.imageState);
+    }
+
+    private fitImageToCanvas() {
+        if (!this.image) return;
+        this.imageState.crop = {
+            x: 0,
+            y: 0,
+            width: this.image.width,
+            height: this.image.height,
+        };
         this.renderer.render(this.image, this.imageState);
     }
 

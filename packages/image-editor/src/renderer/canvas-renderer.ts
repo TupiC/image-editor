@@ -65,4 +65,8 @@ export class CanvasRenderer {
 
         this.ctx.restore();
     }
+
+    toDataURL(type: string = "image/png"): string {
+        return this.canvas.toDataURL(type);
+    }
 }

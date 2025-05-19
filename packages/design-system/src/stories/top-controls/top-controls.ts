@@ -11,7 +11,7 @@ export class TopControls extends LitElement {
     static styles = css`
         .canvas {
             background: #111;
-            border-radius: 0.3rem;
+            border-radius: 0.4rem;
             border: 1px solid #333;
             transition: all 0.5s;
             transform-style: preserve-3d;
@@ -24,7 +24,7 @@ export class TopControls extends LitElement {
             background: #222c;
             border-radius: 1.5rem;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
         }
 
         control-button > button {
@@ -56,6 +56,11 @@ export class TopControls extends LitElement {
             height: 1.25rem;
             stroke: white;
         }
+        control-button > button.primary {
+            background: oklch(89.7% 0.196 126.665);
+            color: black;
+        }
+
         control-button > button span {
             font-size: 0.8rem;
         }
@@ -137,6 +142,14 @@ export class TopControls extends LitElement {
                     width=${this.width}
                     height=${this.height}
                 ></canvas>
+                <!-- save button -->
+                <div class="controls">
+                    <control-button
+                        label="Save"
+                        variant="primary"
+                        @control-click=${() => this._handleAction("save")}
+                    ></control-button>
+                </div>
             </div>
         `;
     }
@@ -163,6 +176,8 @@ export class TopControls extends LitElement {
             case "redo":
                 this.editor.redo();
                 break;
+            case "save":
+                this.editor.saveImage("image/jpeg");
         }
 
         this._emitAction(action);

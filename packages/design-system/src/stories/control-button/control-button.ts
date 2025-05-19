@@ -5,6 +5,7 @@ import { customElement, property } from "lit/decorators.js";
 export class ControlButton extends LitElement {
     @property({ type: String }) label = "";
     @property({ type: String }) icon = "";
+    @property({ type: String }) variant: "primary" | "secondary" = "secondary";
     @property({ type: Boolean }) disabled = false;
 
     private handleClick(_: Event) {
@@ -21,7 +22,11 @@ export class ControlButton extends LitElement {
 
     render() {
         return html`
-            <button ?disabled=${this.disabled} @click=${this.handleClick}>
+            <button
+                ?disabled=${this.disabled}
+                @click=${this.handleClick}
+                class=${this.variant}
+            >
                 ${this.icon
                     ? html`<img src=${this.icon} alt="${this.label} icon" />`
                     : nothing}
