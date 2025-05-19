@@ -23,6 +23,9 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
+  "dependencies": {
+    "@tupi/image-editor": "workspace:*"
+  },
   "devDependencies": {
     "lit": "^3.3.0",
     "@storybook/addon-essentials": "^8.6.12",

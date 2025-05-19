@@ -17,4 +17,11 @@ export class CommandInvoker {
             command.undo();
         }
     }
+
+    redo(): void {
+        const command = this.history[this.history.length - 1];
+        if (command) {
+            command.execute();
+        }
+    }
 }

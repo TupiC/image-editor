@@ -13,8 +13,14 @@ export class FlipImageCommand implements Command {
     }
 
     execute(): void {
-        this.editor.imageState.flip.horizontal = this.horizontal;
-        this.editor.imageState.flip.vertical = this.vertical;
+        if (this.horizontal) {
+            this.editor.imageState.flip.horizontal =
+                !this.previousFlipState.horizontal;
+        }
+        if (this.vertical) {
+            this.editor.imageState.flip.vertical =
+                !this.previousFlipState.vertical;
+        }
     }
 
     undo(): void {

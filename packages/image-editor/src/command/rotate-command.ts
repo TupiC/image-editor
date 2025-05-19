@@ -8,7 +8,7 @@ export class RotateImageCommand implements Command {
     }
 
     execute(): void {
-        this.image.rotation = this.rotation;
+        this.image.rotation += this.rotation;
     }
 
     undo(): void {

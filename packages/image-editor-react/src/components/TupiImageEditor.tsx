@@ -6,10 +6,10 @@ import "@tupi/design-system";
 declare module "react" {
     namespace JSX {
         interface IntrinsicElements {
-            "top-controls": React.DetailedHTMLProps<
-                React.HTMLAttributes<HTMLElement>,
-                HTMLElement
-            >;
+            "top-controls": {
+                width?: number;
+                height?: number;
+            };
         }
     }
 }
@@ -23,8 +23,8 @@ export interface TupiImageEditorProps {
 
 export const TupiImageEditor: React.FC<TupiImageEditorProps> = ({
     src,
-    width = 800,
-    height = 600,
+    width,
+    height,
     onReady,
 }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -56,9 +56,9 @@ export const TupiImageEditor: React.FC<TupiImageEditorProps> = ({
 
     return (
         <>
-            {editor && <EditorControls editor={editor} />}
-            <top-controls></top-controls>
-            <canvas ref={canvasRef} width={width} height={height}></canvas>
+            {/* {editor && <EditorControls editor={editor} />} */}
+            <top-controls width={width} height={height}></top-controls>
+            {/* <canvas ref={canvasRef} width={width} height={height}></canvas> */}
         </>
     );
 };
